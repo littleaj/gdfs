@@ -1,0 +1,22 @@
+{
+  "name": "gdfs",
+  "version": "1.0.0",
+  "description": "A simple command line utility for interacting with files on Google Drive",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "gdfs": "./bin/gdfs.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github:littleaj/gdfs"
+  },
+  "keywords": [
+    "google drive"
+  ],
+  "author": "Arthur Little <1690572+littleaj@users.noreply.github.com>",
+  "license": "MIT"
+}
