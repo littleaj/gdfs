@@ -8,7 +8,9 @@
     "gdfs": "./bin/gdfs.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
+    "clean": "tsc --clean"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,9 @@
     "google drive"
   ],
   "author": "Arthur Little <1690572+littleaj@users.noreply.github.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "typescript": "^5.6.3"
+  }
 }
