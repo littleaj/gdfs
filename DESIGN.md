@@ -92,6 +92,7 @@ Resolves things that were left out or listed in the [Ambiguities](#ambiguities) 
     - There’s already a browser component for local file selection.
     - Making a web app allows me to leverage the provided OAuth UI more easily
 3. Directories are not treated as files, i.e. you cannot download, upload, or delete them.
+4. For the simplicity of v1, this won't support "resumable" uploads. Therefore, the upload file size is limited to 5 MB.
 
 ### UX
 
