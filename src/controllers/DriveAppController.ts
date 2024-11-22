@@ -1,31 +1,41 @@
 import DriveOperations from "../model/DriveOperations";
-import OperationResult from "../model/OperationResult";
-import ApiManager from "./ApiManager";
-import UIController from "./UIController";
+import { Operation, OperationResult } from "../model/OperationUtils";
 
-export default class DriveAppController implements DriveOperations {
-  private readonly ui: UIController;
-  private readonly api: ApiManager;
-  private constructor(ui: UIController, api: ApiManager) { // FIXME use interfaces here
-    this.ui = ui;
-    this.api = api;
-  }
+type ObserverCallback<R> = (result: OperationResult<R>) => void;
 
-  list<FileTreeDTO>(): OperationResult<FileTreeDTO> {
-    // IMPLEMENT
-    throw new Error("Method not implemented.");
+
+interface ObservableDelegate<T extends Operation<any>> {
+  (...args: Parameters<T>): void;
+  addObserver(observer: ObserverCallback<T>): void;
+}
+
+function createObservableDelegate<T extends Operation>(op: T): ObservableDelegate<T> {
+  const observers = new Set<ObserverCallback<T>>();
+  const delegateOp = (...args: Parameters<T>): void => {
+    const result = op(...args);
+    observers.forEach(cb => cb(result));
   }
-  delete<FileDescriptionDTO>(file: FileDescriptionDTO): OperationResult {
-    // IMPLEMENT
-    throw new Error("Method not implemented.");
-  }
-  download<FileDescriptionDTO>(file: FileDescriptionDTO): OperationResult<FileDescriptionDTO> {
-    // IMPLEMENT
-    throw new Error("Method not implemented.");
-  }
-  upload<FileDescriptionDTO>(file: FileDescriptionDTO, to: FileDescriptionDTO): OperationResult<FileDescriptionDTO> {
-    // IMPLEMENT
-    throw new Error("Method not implemented.");
+  delegateOp.addObserver = (cb: ObserverCallback<T>) => observers.add(cb);
+  return delegateOp;
+}
+
+// type Operator = {
+//   [key: string]: Operation
+// }
+
+export default class DriveAppController {
+  readonly #api: DriveOperations;
+  public readonly loadDir: ObservableDelegate<DriveOperations["list"]>;
+  public readonly delete: ObservableDelegate<DriveOperations["delete"]>;
+  public readonly upload: ObservableDelegate<DriveOperations["upload"]>;
+  public readonly download: ObservableDelegate<DriveOperations["download"]>;
+
+  constructor(api: DriveOperations) {
+    this.#api = api;
+    this.loadDir = createObservableDelegate(this.#api.list);
+    this.delete = createObservableDelegate(this.#api.delete);
+    this.download = createObservableDelegate(this.#api.download);
+    this.upload = createObservableDelegate(this.#api.upload);
   }
   
 }
