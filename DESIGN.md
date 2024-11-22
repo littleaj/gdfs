@@ -97,6 +97,7 @@ Resolves things that were left out or listed in the [Ambiguities](#ambiguities) 
 ### UX
 
 * Everything except the login button is disabled until you authenticate and authorize.
+* I'm going to use Material-UI because they have a TreeView component already and they look good without much effort
 
 ### Implementation
 
