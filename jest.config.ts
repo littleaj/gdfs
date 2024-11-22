@@ -12,3 +12,5 @@ const config: Config = {
     // "^.+\\.svg$": "jest-transformer-svg", // if this is needed later
   }
 }
+
+export default config;
