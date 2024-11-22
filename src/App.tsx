@@ -1,10 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import viteLogo from '/vite.svg' //NOSONAR
 import './App.css'
+import ApiManager from './controllers/ApiManager'
+import GoogleApiConfig from './model/GoogleApiConfig'
+import AuthManager from './controllers/AuthManager'
 
 function App() {
+  const apiConfig: GoogleApiConfig = {
+    apiKey: "", // TODO
+    clientId: "", // TODO
+  }
+
   const [count, setCount] = useState(0)
+  const apiMgmt: ApiManager = new ApiManager();
+  const authMgmt: AuthManager = new AuthManager();
+
+  useEffect(() => {
+    // const gsiScript = document.createElement("script");
+    const gapiScript = document.createElement("script");
+    gapiScript.onload = null; // TODO
+  }, []);
+
+  // <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+  //   <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 
   return (
     <>
