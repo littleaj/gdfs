@@ -102,7 +102,7 @@ Resolves things that were left out or listed in the [Ambiguities](#ambiguities) 
 ### Implementation
 
 * Using React because I think it's easier to deal with when there are components like the file/directory tree.
-  * Also, there might be a component lib that could render a directory tree for me.
+  * ~~Also, there might be a component lib that could render a directory tree for me.~~ Thanks, Material-UI!
 * Using TypeScript because type safety prevents a lot of potential bugs at compile time.
-* Using Jest because it has React extensions.
+* Using Jest because it has React extensions and I like the way it reads
 
