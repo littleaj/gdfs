@@ -1,0 +1,1 @@
+export type MaybeAsyncGetter<T = void> = T extends void ? undefined : () => Promise<T>;
