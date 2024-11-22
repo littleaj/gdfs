@@ -91,7 +91,6 @@ Resolves things that were left out or listed in the [Ambiguities](#ambiguities) 
     - Hierarchies are easy in HTML (and simple UIs in general).
     - There’s already a browser component for local file selection.
     - Making a web app allows me to leverage the provided OAuth UI more easily
-    - I think I saw something about a set of **Drive UI** components in the docs. That might help, too.
 3. Directories are not treated as files, i.e. you cannot download, upload, or delete them.
 
 ### UX
