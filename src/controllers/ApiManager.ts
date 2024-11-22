@@ -1,9 +1,10 @@
 import DriveOperations from "../model/DriveOperations";
-import GoogleApiManager from "../model/GoogleApiManager";
-import OperationResult from "../model/OperationResult";
+import { OperationResult } from "../model/OperationUtils";
 
-export default class ApiManager extends GoogleApiManager implements DriveOperations {
-  list<FileTreeDTO>(): OperationResult<FileTreeDTO> {
+export default class ApiManager implements DriveOperations {
+
+  // TODO verify how paths are constructed in Google Drive API
+  list<FileTreeDTO>(basePath?: string): OperationResult<FileTreeDTO> {
     throw new Error("Method not implemented.");
   }
   delete<FileDescriptionDTO>(file: FileDescriptionDTO): OperationResult {

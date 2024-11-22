@@ -1,4 +1,17 @@
-import GoogleApiManager from "../model/GoogleApiManager";
 
-export default class AuthManager extends GoogleApiManager {
+export default class AuthManager {
+
+  login() {
+    // IMPLEMENT
+  }
+
+  logout() {
+    // IMPLEMENT
+  }
+
+
+  registerApiManager() {
+    // IMPLEMENT this will handle ensuring the ApiManager can access auth data and knows if it's logged in or not.
+  }
+
 }
