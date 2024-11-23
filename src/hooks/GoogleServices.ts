@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import ApiService from "../services/ApiService";
-import { ObservableAuthManager } from "../services/AuthService";
-import GoogleApiManager from "../services/GoogleApiManager";
-import GoogleAuthManager from "../services/GoogleAuthManager";
+import GoogleApiService from "../services/GoogleApiService";
+import GoogleAuthService from "../services/GoogleAuthService";
 import { PlainFunction } from "../model/UtilityTypes";
+import { AuthService } from "../services/AuthService";
 
-export function useGoogleApiServices() {
-  const [gauth, setGauth] = useState<ObservableAuthManager>();
+export function useGoogleServices() {
+  const [gauth, setGauth] = useState<AuthService>();
   const [gapi, setGapi] = useState<ApiService>();
 
   type EventInfo = { target: string; verb: string; };
@@ -35,7 +35,7 @@ export function useGoogleApiServices() {
         gsiScript.addEventListener("load", createSuccessHandler(opInfo, resolve));
       });
       const auth = await loader;
-      setGauth(new GoogleAuthManager(auth));
+      setGauth(new GoogleAuthService(auth));
     };
     loadGsi();
 
@@ -66,7 +66,7 @@ export function useGoogleApiServices() {
 
       });
       const api = await loader;
-      setGapi(new GoogleApiManager(api));
+      setGapi(new GoogleApiService(api));
     };
     loadGapi();
   }, []);
