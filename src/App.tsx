@@ -17,10 +17,11 @@ function App() {
   }
 
   const [count, setCount] = useState(0)
-  const [authManager, setAuthManager] = useState<ObservableAuthManager>();
-  const [apiManager, setApiManager] = useState<ApiManager>();
   const [uiController, setUiController] = useState<UIController>();
   const [appController, setAppController] = useState<AppController>();
+  
+  const [authManager, setAuthManager] = useState<ObservableAuthManager>();
+  const [apiManager, setApiManager] = useState<ApiManager>();
 
   useEffect(() => {
     const gsiScript = document.getElementById("script-gsi") as HTMLScriptElement;
