@@ -1,7 +1,10 @@
-import ApiManager from "./ApiManager";
+import { ObservableFacade } from "../model/ObservableDelegate";
+import { OperationResult } from "../model/Operation";
 
-export default interface AuthManager {
+export interface AuthManager {
   loggedIn: boolean;
-  login(): Promise<void>;
-  logout(): Promise<void>;
+  login(): OperationResult;
+  logout(): OperationResult;
 }
+
+export type ObservableAuthManager = ObservableFacade<AuthManager>;
