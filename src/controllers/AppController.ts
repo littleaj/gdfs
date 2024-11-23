@@ -1,16 +1,16 @@
 import { ObservableDelegate, ObservableFacade, createObservableDelegate } from "../model/ObservableDelegate";
-import ApiManager from "./ApiManager";
+import ApiService from "./ApiService";
 
 /**
  * Encapsulates application behaviors
  */
-export default class AppController implements ObservableFacade<ApiManager> {
-  public readonly list: ObservableDelegate<ApiManager["list"]>;
-  public readonly delete: ObservableDelegate<ApiManager["delete"]>;
-  public readonly upload: ObservableDelegate<ApiManager["upload"]>;
-  public readonly download: ObservableDelegate<ApiManager["download"]>;
+export default class AppController implements ObservableFacade<ApiService> {
+  public readonly list: ObservableDelegate<ApiService["list"]>;
+  public readonly delete: ObservableDelegate<ApiService["delete"]>;
+  public readonly upload: ObservableDelegate<ApiService["upload"]>;
+  public readonly download: ObservableDelegate<ApiService["download"]>;
 
-  constructor(api: ApiManager) {
+  constructor(api: ApiService) {
     this.list = createObservableDelegate(api.list);
     this.delete = createObservableDelegate(api.delete);
     this.download = createObservableDelegate(api.download);

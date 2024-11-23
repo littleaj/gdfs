@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ApiManager from "../controllers/ApiManager";
+import ApiService from "../controllers/ApiService";
 import { ObservableAuthManager } from "../controllers/AuthManager";
 import GoogleApiManager from "../controllers/GoogleApiManager";
 import GoogleAuthManager from "../controllers/GoogleAuthManager";
@@ -7,7 +7,7 @@ import { PlainFunction } from "../model/UtilityTypes";
 
 export function useGoogleApiServices() {
   const [gauth, setGauth] = useState<ObservableAuthManager>();
-  const [gapi, setGapi] = useState<ApiManager>();
+  const [gapi, setGapi] = useState<ApiService>();
 
   type EventInfo = { target: string; verb: string; };
   const createFailureHandler = ({ target, verb }: EventInfo, reject: (reason?: any) => void) => (e: ErrorEvent) => {

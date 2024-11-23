@@ -1,6 +1,6 @@
 import { OperationResult } from "../model/Operation";
 
-export default interface ApiManager {
+export default interface ApiService {
   
   // TODO clean up these types with the actual type heirarchies
   list<FileTreeDTO>(basePath?: string): OperationResult<FileTreeDTO>;

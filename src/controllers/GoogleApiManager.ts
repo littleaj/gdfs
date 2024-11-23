@@ -1,7 +1,7 @@
 import { OperationResult } from "../model/Operation";
-import ApiManager from "./ApiManager";
+import ApiService from "./ApiService";
 
-export default class GoogleApiManager implements ApiManager {
+export default class GoogleApiManager implements ApiService {
   #client: GAPI;
   constructor(client: GAPI) {
     this.#client = client;
@@ -18,6 +18,4 @@ export default class GoogleApiManager implements ApiManager {
   upload<FileDescriptionDTO>(file: FileDescriptionDTO, to: FileDescriptionDTO): OperationResult<FileDescriptionDTO> {
     throw new Error("Method not implemented.");
   }
- 
-
 }
