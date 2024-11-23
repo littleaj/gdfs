@@ -1,22 +1,27 @@
-import { OperationResult, Operation } from "./Operation";
+import { OperationResult, Task, Action, Operation } from "./Operation";
 
-export type ObserverCallback<R> = (result: OperationResult<R>) => void;
+export type ObserverCallback<T extends Operation> = 
+  T extends Action ? 
+    (result: OperationResult) => void :
+    T extends Task<infer DataType> ? (result: OperationResult<DataType>) => void : never;
 
-export interface ObservableDelegate<T extends Operation<any>> {
-  (...args: Parameters<T>): void;
-  addObserver(observer: ObserverCallback<T>): void;
+export interface ObservableDelegate<OpFn extends Operation> {
+  (...args: Parameters<OpFn>): void;
+  addObserver(observer: ObserverCallback<OpFn>): void;
 }
 
-export type ObserveableFacade<T> = {
-  [key in keyof T]: T[key] extends Operation ? ObservableDelegate<T[key]> : T[key];
+type DelegateOrDefault<T, K extends keyof T> = T[K] extends Operation ? ObservableDelegate<T[K]> : T[K]
+
+export type ObservableFacade<T> = {
+  [key in keyof T]: DelegateOrDefault<T, key>;
 }
 
-export function createObservableDelegate<T extends Operation>(op: T): ObservableDelegate<T> {
-  const observers = new Set<ObserverCallback<T>>();
-  const delegateOp = (...args: Parameters<T>): void => {
+export function createObservableDelegate<OpFn extends Operation>(op: OpFn): ObservableDelegate<OpFn> {
+  const observers = new Set<ObserverCallback<OpFn>>();
+  const delegateOp = (...args: Parameters<OpFn>): void => {
     const result = op(...args);
     observers.forEach(cb => cb(result));
   };
-  delegateOp.addObserver = (cb: ObserverCallback<T>) => observers.add(cb);
+  delegateOp.addObserver = (cb: ObserverCallback<OpFn>) => observers.add(cb);
   return delegateOp;
 }

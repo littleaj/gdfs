@@ -1,9 +1,12 @@
-import { MaybeAsyncGetter } from "./TypeUtils";
 
-export interface OperationResult<T = void> {
-  success: boolean;
-  message?: string;
-  data?: MaybeAsyncGetter<T>;
-}
+export type ErrorResult = { success: false, message: string };
+export type OperationResult<DataType = void> =
+  ErrorResult | (
+    DataType extends void ?
+    { success: true } :
+    { success: true, data: () => Promise<DataType> }
+  );
 
-export type Operation<T = any, P extends any[] = any[]> = (...args: P) => OperationResult<T>;
+export type Operation = Task<any> | Action;
+export type Task<DataType> = (...args: any[]) => OperationResult<DataType>;
+export type Action = (...args: any[]) => OperationResult;
