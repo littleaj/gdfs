@@ -1,13 +1,13 @@
 import { createObservableDelegate, ObservableDelegate, ObservableFacade } from "../model/ObservableDelegate";
 import { Action } from "../model/Operation";
-import { AuthManager } from "./AuthManager";
+import { AuthService } from "./AuthService";
 
-export default class GoogleAuthManager implements ObservableFacade<AuthManager> {
+export default class GoogleAuthManager implements ObservableFacade<AuthService> {
   #loggedIn: boolean = false;
   #client: GIS;
 
-  public readonly login: ObservableDelegate<AuthManager["login"]>;
-  public readonly logout: ObservableDelegate<AuthManager["logout"]>;
+  public readonly login: ObservableDelegate<AuthService["login"]>;
+  public readonly logout: ObservableDelegate<AuthService["logout"]>;
 
   constructor(client: GIS) {
     this.#client = client;

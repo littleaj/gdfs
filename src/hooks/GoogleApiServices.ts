@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ApiService from "../controllers/ApiService";
-import { ObservableAuthManager } from "../controllers/AuthManager";
+import { ObservableAuthManager } from "../controllers/AuthService";
 import GoogleApiManager from "../controllers/GoogleApiManager";
 import GoogleAuthManager from "../controllers/GoogleAuthManager";
 import { PlainFunction } from "../model/UtilityTypes";
