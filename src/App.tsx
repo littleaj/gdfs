@@ -4,8 +4,7 @@ import viteLogo from '/vite.svg' //NOSONAR
 import './App.css'
 import GoogleApiConfig from './model/GoogleApiConfig'
 import UIStateManager from './services/UIStateManager'
-import AppController from './services/AppController'
-import { useGoogleApiServices } from './hooks/GoogleApiServices'
+import { useGoogleServices } from './hooks/GoogleServices'
 
 function App() {
   const apiConfig: GoogleApiConfig = {
@@ -15,9 +14,9 @@ function App() {
 
   const [count, setCount] = useState(0)
   const [uiController, setUiController] = useState<UIStateManager>();
-  const [appController, setAppController] = useState<AppController>();
+  const [appController, setAppController] = useState<any>(); // FIXME
 
-  const services = useGoogleApiServices();
+  const services = useGoogleServices();
 
   return (
     <>
