@@ -3,8 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg' //NOSONAR
 import './App.css'
 import GoogleApiConfig from './model/GoogleApiConfig'
-import UIStateManager from './controllers/UIStateManager'
-import AppController from './controllers/AppController'
+import UIStateManager from './services/UIStateManager'
+import AppController from './services/AppController'
 import { useGoogleApiServices } from './hooks/GoogleApiServices'
 
 function App() {
