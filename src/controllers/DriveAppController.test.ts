@@ -18,11 +18,11 @@ describe("DriveAppController methods", () => {
     jest.resetAllMocks();
   });
 
-  type DelegateMapping = [keyof typeof controller, keyof typeof mockApi];
-  function createBasicDelegateTest([ctrlName, apiName]: DelegateMapping) {
+  type ControllerMethodNames = keyof typeof controller;
+  function createBasicDelegateTest(methodName: ControllerMethodNames) {
     return <T extends any[]>(...args: T) => {
       const obs = jest.fn();
-      const methodFn = controller[ctrlName];
+      const methodFn = controller[methodName];
       methodFn.addObserver(obs);
       if (args.length === 0) {
         methodFn();
@@ -30,7 +30,7 @@ describe("DriveAppController methods", () => {
         methodFn(...args);
       }
 
-      const apiFn = mockApi[apiName];
+      const apiFn = mockApi[methodName];
       expect(apiFn.mock.calls).toHaveLength(1);
       args.forEach((arg, i) => {
         expect(apiFn.mock.calls[0][i]).toBe(arg);
@@ -41,14 +41,14 @@ describe("DriveAppController methods", () => {
   }
 
   it.each([[undefined], ["test/path/to/file1"]])("refresh(...) delegates to api.list: %s",
-    createBasicDelegateTest(["loadDir", "list"]));
+    createBasicDelegateTest("list"));
 
   it.each([["test/path/to/file2"]])("delete(...) delegates to api.delete: %s",
-    createBasicDelegateTest(["delete", "delete"]));
+    createBasicDelegateTest("delete"));
 
   it.each([["test/path/to/file3"]])("download(...) delegates to api.download: %s",
-    createBasicDelegateTest(["download", "download"]));
+    createBasicDelegateTest("download"));
 
   it.each([["test/path/to/local", "remote/path"]])("upload(...) delegates to api.upload: %s",
-    createBasicDelegateTest(["upload", "upload"]));
+    createBasicDelegateTest("upload"));
 });
