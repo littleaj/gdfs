@@ -3,7 +3,7 @@ import { FileTreeData } from "../model/data/ui/FileTreeData";
 /**
  * Encapsulates all UI updates
  */
-export default class UIController {
+export default class UIStateManager {
   private constructor() {
   }
 

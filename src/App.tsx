@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg' //NOSONAR
 import './App.css'
 import GoogleApiConfig from './model/GoogleApiConfig'
-import UIController from './controllers/UIController'
+import UIStateManager from './controllers/UIStateManager'
 import AppController from './controllers/AppController'
 import { useGoogleApiServices } from './hooks/GoogleApiServices'
 
@@ -14,7 +14,7 @@ function App() {
   }
 
   const [count, setCount] = useState(0)
-  const [uiController, setUiController] = useState<UIController>();
+  const [uiController, setUiController] = useState<UIStateManager>();
   const [appController, setAppController] = useState<AppController>();
 
   const services = useGoogleApiServices();
