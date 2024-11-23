@@ -1,4 +1,4 @@
-import { OperationResult } from "./OperationUtils";
+import { OperationResult } from "./Operation";
 
 export default interface DriveOperations {
   // TODO clean up these types with the actual type heirarchies
