@@ -4,7 +4,11 @@ import viteLogo from '/vite.svg' //NOSONAR
 import './App.css'
 import ApiManager from './controllers/ApiManager'
 import GoogleApiConfig from './model/GoogleApiConfig'
-import AuthManager from './controllers/AuthManager'
+import UIController from './controllers/UIController'
+import DriveAppController from './controllers/DriveAppController'
+import GoogleAuthManager from './controllers/GoogleAuthManager'
+import GoogleApiManager from './controllers/GoogleApiManager'
+import { ObservableAuthManager } from './controllers/AuthManager'
 
 function App() {
   const apiConfig: GoogleApiConfig = {
@@ -13,18 +17,60 @@ function App() {
   }
 
   const [count, setCount] = useState(0)
-  const apiMgmt: ApiManager = new ApiManager();
-  const authMgmt: AuthManager = new AuthManager();
+  const [authManager, setAuthManager] = useState<ObservableAuthManager>();
+  const [apiManager, setApiManager] = useState<ApiManager>();
+  const [uiController, setUiController] = useState<UIController>();
+  const [appController, setAppController] = useState<DriveAppController>();
 
   useEffect(() => {
-    // const gsiScript = document.createElement("script");
-    const gapiScript = document.createElement("script");
-    gapiScript.onload = null; // TODO
+    const gsiScript = document.getElementById("script-gsi") as HTMLScriptElement;
+    
+    const loadGsi = async () => {
+      const loader = new Promise<GIS>((resolve, reject) => {
+        gsiScript.addEventListener("error", (e) => {
+          console.error("GSI could not load: ", e.message);
+          console.error(e.error);
+          reject(e.error);
+        });
+        gsiScript.addEventListener("load", () => {
+          const auth = window.google.accounts.oauth2
+          console.info("Loaded GSI: ", !!auth);
+          resolve(auth);
+        });
+
+      });
+      const auth = await loader;
+      setAuthManager(new GoogleAuthManager(auth));
+    };
+    loadGsi();
+
+    return () => {
+      authManager?.logout();
+    }
   }, []);
+  
+  useEffect(() => {
+    const gapiScript = document.getElementById("script-gapi") as HTMLScriptElement;
+    const loadGapi = async () => {
+      const loader = new Promise<GAPI>((resolve, reject) => {
+        gapiScript.addEventListener("error", (e) => {
+          console.error("GAPI could not load: ", e.message);
+          console.error(e.error);
+          reject(e.error);
+        });
+        gapiScript.addEventListener("load", () => {
+          const api = window.gapi
+          console.info("Loaded GAPI: ", !!api);
+          resolve(api);
+        });
 
-  // <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-  //   <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
-
+      });
+      const api = await loader;
+      setApiManager(new GoogleApiManager(api));
+    };
+    loadGapi();
+  }, []);
+  
   return (
     <>
       <div>
