@@ -1,4 +1,3 @@
-import DriveOperations from "../model/DriveOperations";
 import DriveAppController from "./DriveAppController";
 
 describe("DriveAppController methods", () => {
