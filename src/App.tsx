@@ -5,7 +5,7 @@ import './App.css'
 import ApiManager from './controllers/ApiManager'
 import GoogleApiConfig from './model/GoogleApiConfig'
 import UIController from './controllers/UIController'
-import DriveAppController from './controllers/DriveAppController'
+import AppController from './controllers/AppController'
 import GoogleAuthManager from './controllers/GoogleAuthManager'
 import GoogleApiManager from './controllers/GoogleApiManager'
 import { ObservableAuthManager } from './controllers/AuthManager'
@@ -20,7 +20,7 @@ function App() {
   const [authManager, setAuthManager] = useState<ObservableAuthManager>();
   const [apiManager, setApiManager] = useState<ApiManager>();
   const [uiController, setUiController] = useState<UIController>();
-  const [appController, setAppController] = useState<DriveAppController>();
+  const [appController, setAppController] = useState<AppController>();
 
   useEffect(() => {
     const gsiScript = document.getElementById("script-gsi") as HTMLScriptElement;
@@ -56,7 +56,7 @@ function App() {
         gapiScript.addEventListener("error", (e) => {
           console.error("GAPI could not load: ", e.message);
           console.error(e.error);
-          reject(e.error);
+          reject(new Error(e.message));
         });
         gapiScript.addEventListener("load", () => {
           const api = window.gapi

@@ -1,7 +1,7 @@
-import DriveAppController from "./DriveAppController";
+import AppController from "./AppController";
 
-describe("DriveAppController methods", () => {
-  let controller: DriveAppController;
+describe("AppController methods", () => {
+  let controller: AppController;
   const mockApi = {
     list: jest.fn(),
     delete: jest.fn(),
@@ -10,7 +10,7 @@ describe("DriveAppController methods", () => {
   };
 
   beforeEach(() => {
-    controller = new DriveAppController(mockApi);
+    controller = new AppController(mockApi);
   });
 
   afterEach(() => {

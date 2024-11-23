@@ -4,7 +4,7 @@ import ApiManager from "./ApiManager";
 /**
  * Encapsulates application behaviors
  */
-export default class DriveAppController implements ObservableFacade<ApiManager> {
+export default class AppController implements ObservableFacade<ApiManager> {
   public readonly list: ObservableDelegate<ApiManager["list"]>;
   public readonly delete: ObservableDelegate<ApiManager["delete"]>;
   public readonly upload: ObservableDelegate<ApiManager["upload"]>;
