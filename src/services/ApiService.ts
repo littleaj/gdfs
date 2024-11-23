@@ -1,10 +1,8 @@
-import { OperationResult } from "../model/Operation";
 
 export default interface ApiService {
-  
-  // TODO clean up these types with the actual type heirarchies
-  list<FileTreeDTO>(basePath?: string): OperationResult<FileTreeDTO>;
-  delete<FileDescriptionDTO>(file: FileDescriptionDTO): OperationResult;
-  download<FileDescriptionDTO>(file: FileDescriptionDTO): OperationResult<FileDescriptionDTO>;
-  upload<FileDescriptionDTO>(file: FileDescriptionDTO, to: FileDescriptionDTO): OperationResult<FileDescriptionDTO>;
+  // TODO clean up these types with concrete types
+  list<FileTreeDTO>(basePath?: string): FileTreeDTO;
+  delete<FileDescriptionDTO>(file: FileDescriptionDTO): boolean;
+  download<FileDescriptionDTO>(file: FileDescriptionDTO): FileDescriptionDTO;
+  upload<FileDescriptionDTO>(file: FileDescriptionDTO, to: FileDescriptionDTO): FileDescriptionDTO;
 }

@@ -1,11 +1,5 @@
-import { ObservableFacade } from "../model/ObservableDelegate";
-import { OperationResult } from "../model/Operation";
 
 export interface AuthService {
-  loggedIn: boolean;
-  login(): OperationResult;
-  logout(): OperationResult;
+  login(): boolean;
+  logout(): boolean;
 }
-
-// FIXME remove this coupling
-export type ObservableAuthManager = ObservableFacade<AuthService>;

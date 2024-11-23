@@ -1,20 +1,24 @@
-import { ObservableDelegate, ObservableFacade, createObservableDelegate } from "../model/ObservableDelegate";
-import ApiService from "./ApiService";
+import { createObservableDelegate, ObservableOperation } from "../model/operations/Observable";
+import { Operation } from "../model/operations/Operation";
 
-/**
- * Encapsulates application behaviors
- */
-export default class AppController implements ObservableFacade<ApiService> {
-  public readonly list: ObservableDelegate<ApiService["list"]>;
-  public readonly delete: ObservableDelegate<ApiService["delete"]>;
-  public readonly upload: ObservableDelegate<ApiService["upload"]>;
-  public readonly download: ObservableDelegate<ApiService["download"]>;
-
-  constructor(api: ApiService) {
-    this.list = createObservableDelegate(api.list);
-    this.delete = createObservableDelegate(api.delete);
-    this.download = createObservableDelegate(api.download);
-    this.upload = createObservableDelegate(api.upload);
-  }
-  
+type AppendedOperation<T extends object, K extends string, F extends Operation> = T & { [key in K]: F };
+type AppControllerBuilder<T extends Record<string, ObservableOperation> = {}> = {
+  withCommand<Cmd extends string, Op extends Operation>(name: Cmd, op: Op): AppControllerBuilder<AppendedOperation<T, Cmd, Op>>;
+  create(): T;
 }
+
+export function buildAppController(): AppControllerBuilder {
+  const result: Record<string, ObservableOperation> = {};
+  const builder = {
+    withCommand(name: string, op: Operation) {
+      result[name] = createObservableDelegate(op);
+      return builder;
+    },
+    create() {
+      return result;
+    }
+  }
+  return builder as AppControllerBuilder;
+}
+
+
