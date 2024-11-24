@@ -14,6 +14,7 @@ export default tseslint.config(
       // ...tseslint.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
+      [ "no-explicit-any", "off" ]
     ],
     settings: {
       react: {version: '18.3' }
@@ -39,7 +40,7 @@ export default tseslint.config(
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
-      ],
+      ]
     },
   },
 )
