@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import ApiService from "../services/ApiService";
+import ApiService, { NULL_API_SERVICE } from "../services/ApiService";
 import GoogleApiService from "../services/GoogleApiService";
 import GoogleAuthService from "../services/GoogleAuthService";
 import { PlainFunction } from "../model/UtilityTypes";
-import { AuthService } from "../services/AuthService";
+import AuthService, { NULL_AUTH_SERVICE } from "../services/AuthService";
+import RemoteService from "../services/RemoteService";
+import GoogleApiConfig from "../model/GoogleApiConfig";
 
-export function useGoogleServices() {
-  const [gauth, setGauth] = useState<AuthService>();
-  const [gapi, setGapi] = useState<ApiService>();
+// XXX this could be more generic to better support other implementations
+export function useGoogleServices(apiConfig: GoogleApiConfig) {
+  const [auth, setAuth] = useState<AuthService>(NULL_AUTH_SERVICE);
+  const [api, setApi] = useState<ApiService>(NULL_API_SERVICE);
 
   type EventInfo = { target: string; verb: string; };
   const createFailureHandler = ({ target, verb }: EventInfo, reject: (reason?: any) => void) => (e: ErrorEvent) => {
@@ -35,12 +38,12 @@ export function useGoogleServices() {
         gsiScript.addEventListener("load", createSuccessHandler(opInfo, resolve));
       });
       const auth = await loader;
-      setGauth(new GoogleAuthService(auth));
+      setAuth(new GoogleAuthService(auth, apiConfig));
     };
     loadGsi();
 
     return () => {
-      gauth?.logout();
+      auth?.logout();
     };
   }, []);
 
@@ -53,12 +56,12 @@ export function useGoogleServices() {
           verb: "load",
         };
         gapiScript.addEventListener("error", createFailureHandler(opInfo, reject));
-        gapiScript.addEventListener("error", (e) => {
+        gapiScript.addEventListener("error", (e) => { // TODO make createFailureHandler more generic or another approach
           console.error("GAPI could not load: ", e.message);
           console.error(e.error);
           reject(new Error(e.message));
         });
-        gapiScript.addEventListener("load", () => {
+        gapiScript.addEventListener("load", () => { // TODO make createSuccessHandler more generic or another approach
           const api = window.gapi;
           console.info("Loaded GAPI: ", !!api);
           resolve(api);
@@ -66,13 +69,10 @@ export function useGoogleServices() {
 
       });
       const api = await loader;
-      setGapi(new GoogleApiService(api));
+      setApi(new GoogleApiService(api));
     };
     loadGapi();
   }, []);
 
-  return {
-    gauth,
-    gapi
-  };
+  return { auth, api } as RemoteService;
 }
