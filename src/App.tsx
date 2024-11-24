@@ -5,7 +5,7 @@ import './App.css'
 import GoogleAuthConfig from './model/GoogleAuthConfig'
 import { useGoogleServices } from './hooks/GoogleServices'
 import { useApplicationCommands, useUiStateReducer } from './hooks/ApplicationCommands'
-import { useApplicationExecutor } from './hooks/CommandExecutors'
+import { UiStateContext } from './model/contexts/UiStateContext'
 
 function App() {
   const apiConfig: GoogleAuthConfig = {
@@ -28,6 +28,7 @@ function App() {
 
   return (
     <>
+      <UiStateContext.Provider value={uiState}>
         <div>
           <a href="https://vite.dev" target="_blank">
             <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -48,6 +49,7 @@ function App() {
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>
+      </UiStateContext.Provider>
     </>
   )
 }
