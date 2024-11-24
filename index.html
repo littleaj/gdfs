@@ -5,14 +5,20 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
   <title>GDFS - Google Drive File System</title>
 </head>
 
 <body>
   <div id="root"></div>
+  <script src="https://apis.google.com/js/api.js" id="script-gapi"></script>
+  <script src="https://accounts.google.com/gsi/client" id="script-gsi"></script>
   <script type="module" src="/src/main.tsx"></script>
-  <script async defer src=https://apis.google.com/js/api.js" id="script-gapi"></script>
-  <script async defer src="https://accounts.google.com/gsi/client" id="script-gsi"></script>
 </body>
 
 </html>
