@@ -5,10 +5,10 @@ import GoogleAuthService from "../services/GoogleAuthService";
 import { PlainFunction } from "../model/UtilityTypes";
 import AuthService, { NULL_AUTH_SERVICE } from "../services/AuthService";
 import RemoteService from "../services/RemoteService";
-import GoogleApiConfig from "../model/GoogleApiConfig";
+import GoogleAuthConfig from "../model/GoogleAuthConfig";
 
 // XXX this could be more generic to better support other implementations
-export function useGoogleServices(apiConfig: GoogleApiConfig) {
+export function useGoogleServices(apiConfig: GoogleAuthConfig) {
   const [auth, setAuth] = useState<AuthService>(NULL_AUTH_SERVICE);
   const [api, setApi] = useState<ApiService>(NULL_API_SERVICE);
 
