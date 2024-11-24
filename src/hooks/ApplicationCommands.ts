@@ -1,19 +1,22 @@
-import { useReducer, useState } from "react";
+import { createContext, useReducer, useState } from "react";
 import ApiService from "../services/ApiService";
 import AuthService from "../services/AuthService";
 import { dispatcherBuilder } from "../commands/CommandDispatcher";
 
 // FIXME put different hooks in their own files
 
+export const ApplciationCommands = createContext({} as ApplicationCommandDispatcher)
+
 /**
  * UI elements use this to dispatch commands to application services
  */
 export function useApplicationCommands(auth: AuthService, api: ApiService) {
+  console.log("Initializing ApplicationCommands...");
   const [commands, /* readonly */] = useState(
     () => dispatcherBuilder()
-      .withCommand("login", () => auth.login())
+      .withCommand("login", auth.login)
       .withCommand("logout", () => auth.logout())
-      .withCommand("listFiles", (path: string) => api.list(path))
+      .withCommand("listFiles", (path?: string) => api.list(path))
       .withCommand("upload", (localPath: string, remotePath: string) => api.upload(localPath, remotePath))
       .withCommand("download", (remotePath: string, localPath: string) => api.download(remotePath, localPath))
       .withCommand("delete", (remoteFile: string) => api.delete(remoteFile))
@@ -45,7 +48,7 @@ type MultiSet<K, V> = Map<K, Set<V>>;
 // Q: can this be a template string?
 type DrivePath = string; // NOSONAR
 type DriveItemType = "file" | "folder" | "drive";
-type DriveItem = {
+export type DriveItem = {
   name: string;
   path: DrivePath;
   type: DriveItemType;
@@ -63,14 +66,21 @@ export type UiState = {
       contents: MultiSet<DrivePath, DrivePath>,
       expanded: Set<DrivePath>,
     }
+  },
+  dialog: {
+    shown: boolean,
+    message?: string,
+    type: DialogType,
   }
 }
 
-const UI_UPDATE_ACTIONS = ["enable", "disable", "expand", "collapse", "reset", "populate"] as const;
+type DialogType = "error" | "info";
+
+const UI_UPDATE_ACTIONS = ["enable", "disable", "expand", "collapse", "reset", "populate", "show_dialog", "hide_dialog"] as const;
 
 type UiUpdateAction = typeof UI_UPDATE_ACTIONS[number];
 type UiUpdateRequest =
-  { id: ComponentId, action: UiUpdateAction, path?: DrivePath, contents?: DriveItem[] }
+  { id: ComponentId, action: UiUpdateAction, path?: DrivePath, contents?: DriveItem[], message?: string }
 
 type UiUpdateData = Omit<UiUpdateRequest, "action">
 
@@ -83,21 +93,25 @@ function createInitalUiState(disabled: ComponentId[]): UiState {
         contents: new Map<DrivePath, Set<DrivePath>>(), // Q: maybe make a MultiSet class/proxy?
         expanded: new Set<DrivePath>()
       }
+    },
+    dialog: {
+      shown: false,
+      type: "info",
     }
   }
 }
 
-const clone = <T extends { [key: string]: any }>(obj: T): T => ({ ...obj });
+const cloneState = <T extends { [key: string]: any }>(obj: T): T => ({ ...obj });
 
 type StateMutator = (state: UiState) => { [K in UiUpdateAction]: (data: UiUpdateData) => UiState };
 
 const uiStateMutator: StateMutator = (state: UiState) => ({
   enable: ({ id }: UiUpdateData) => {
-    return state.disabled.delete(id) ? clone(state) : state;
+    return state.disabled.delete(id) ? cloneState(state) : state;
   },
   disable: ({ id }: UiUpdateData) => {
     state.disabled.add(id);
-    return clone(state);
+    return cloneState(state);
   },
   populate: ({ id, contents }: UiUpdateData) => {
     if (!contents || contents.length === 0 || id !== DRIVE_FILES_COMPONENT_ID) {
@@ -124,28 +138,42 @@ const uiStateMutator: StateMutator = (state: UiState) => ({
       }
     });
 
-    return clone(state);
+    return cloneState(state);
   },
   expand: ({ path }: UiUpdateData) => {
     if (!path) {
       return state;
     }
     state.drive.directories.expanded.add(path);
-    return clone(state);
+    return cloneState(state);
   },
   collapse: ({ path }: UiUpdateData) => {
     if (!path) {
       return state;
     }
-    return state.drive.directories.expanded.delete(path) ? clone(state) : state;
+    return state.drive.directories.expanded.delete(path) ? cloneState(state) : state;
   },
   reset: () => {
     return createInitalUiState([DRIVE_COMPONENTS_PANEL_ID]);
+  },
+  show_dialog: ({ message, id }) => {
+    state.dialog.shown = true;
+    state.dialog.type = id as DialogType;
+    state.dialog.message = message ?? "Unknown " + id;
+    return cloneState(state);
+  },
+  hide_dialog: () => {
+    state.dialog.shown = false;
+    state.dialog.type = "info";
+    state.dialog.message = undefined;
+    return cloneState(state);
   }
 });
 
 const DRIVE_COMPONENTS_PANEL_ID = "drive-panel";
 const DRIVE_FILES_COMPONENT_ID = "drive-files";
+
+type UiStateDispatcher = ReturnType<typeof useUiStateReducer>[1];
 
 /**
  * UI components use the state to configure their attributes.
