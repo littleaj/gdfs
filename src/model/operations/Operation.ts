@@ -1,22 +1,18 @@
-import { DefinedFunction, Maybe, TotalFunction } from "../UtilityTypes";
+import { PlainFunction } from "../UtilityTypes";
 
-export type ErrorResult = { success: false, message: string };
-export type OperationStatus<DataType = void> =
-  ErrorResult | (
-    DataType extends void ?
-    { success: true } :
-    { success: true, result: () => Promise<DataType> }
-  );
+// export type OperationStatus<DataType = void> =
+//     DataType extends void ?
+//     SuccessfulActionStatus | ErrorStatus :
+//     SuccessfulTaskStatus<DataType> | ErrorStatus;
 
-/**
- * Should only return undefined on an error.
-*/
-export type Task<P extends any[] = any[], R = any> = R extends void ? never : DefinedFunction<P, Maybe<R>>;
+// export type ErrorStatus = { success: false, message: string };
+// export type SuccessfulActionStatus = { success: true };
+// export type SuccessfulTaskStatus<R> = { success: true, result?: R };
 
-/**
- * Returns true on success, false on error.
- */
-export type Action<P extends any[] = any[]> = TotalFunction<P, boolean>;
+export interface OperationResponse<R = void> {
+  success: boolean,
+  message?: string,
+  data?: R,
+}
 
-// export type Operation<P extends any[] = any[], R = void> = R extends void ? Action<P> : Task<P, R>;
-export type Operation<P extends any[] = any[], R = any> = R extends void ? Action<P> : Task<P, R>;
+export type Operation<P extends any[] = any[], R = any> = PlainFunction<P, R>;

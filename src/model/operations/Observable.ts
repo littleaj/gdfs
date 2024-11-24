@@ -1,26 +1,29 @@
-import { OperationStatus, Operation } from "./Operation";
+import { PlainFunction } from "../UtilityTypes";
+import { OperationResponse, Operation } from "./Operation";
 
-export type ObserverCallback<T extends Operation<any[], any>> = 
-  T extends Operation<any[], infer R> ?
-  R extends void ? (result: OperationStatus) => void : (result: OperationStatus<R>) => void : never;
+export type ObserverCallback<T extends Operation> = (result: OperationResponse<ReturnType<T>>) => void;
 
-export interface ObservableOperation<OpFn extends Operation = Operation<any[], any>> {
+export interface ObservableOperation<OpFn extends Operation = PlainFunction> {
   (...args: Parameters<OpFn>): void;
-  addObserver(observer: ObserverCallback<OpFn>): void;
+  addObserver(observer: ObserverCallback<OpFn>): void; // XXX maybe this should have a default error path & the cb is just for success
 }
 
-type ObservedOperationOrDefault<T, K extends keyof T> = T[K] extends Operation ? ObservableOperation<T[K]> : T[K]
-
-export type ObservableFacade<T> = {
-  [K in keyof T]: ObservedOperationOrDefault<T, K>;
-}
-
-export function createObservableDelegate<OpFn extends Operation>(op: OpFn): ObservableOperation<OpFn> {
-  const observers = new Set<ObserverCallback<OpFn>>();
-  const delegateOp = (...args: Parameters<OpFn>): void => {
-    const result = op(...args);
-    observers.forEach(cb => cb(result));
+export function createObservableDelegate<Op extends Operation>(op: Op): ObservableOperation<Op> {
+  console.log("Building observable function for ", op);
+  const observers = new Set<ObserverCallback<Op>>();
+  const delegateOp = (...args: Parameters<Op>): void => {
+    console.log("Running ", op, "...");
+    let response: OperationResponse<ReturnType<Op>> = {
+      success: true,   
+    };
+    try {
+      response.data = op(...args);
+    } catch (e) {
+      response.success = false;
+      response.message = "" + e;
+    }
+    observers.forEach(cb => cb(response));
   };
-  delegateOp.addObserver = (cb: ObserverCallback<OpFn>) => observers.add(cb);
+  delegateOp.addObserver = (cb: ObserverCallback<Op>) => observers.add(cb);
   return delegateOp;
 }
