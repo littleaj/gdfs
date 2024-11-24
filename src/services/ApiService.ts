@@ -1,4 +1,3 @@
-import { throwUninitialized } from "./ServiceUtils";
 
 export default interface ApiService {
   // TODO clean up these types with concrete types
@@ -6,11 +5,4 @@ export default interface ApiService {
   delete<FileDescriptionDTO>(file: FileDescriptionDTO): boolean;
   download<FileDescriptionDTO>(remote: FileDescriptionDTO, local: FileDescriptionDTO): FileDescriptionDTO;
   upload<FileDescriptionDTO>(local: FileDescriptionDTO, remote: FileDescriptionDTO): FileDescriptionDTO;
-}
-
-export const NULL_API_SERVICE: ApiService = {
-  list: () => throwUninitialized(),
-  delete: () => throwUninitialized(),
-  download: () => throwUninitialized(),
-  upload: () => throwUninitialized(),
 }
