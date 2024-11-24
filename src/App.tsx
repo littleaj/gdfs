@@ -2,21 +2,22 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg' //NOSONAR
 import './App.css'
-import GoogleApiConfig from './model/GoogleApiConfig'
+import GoogleAuthConfig from './model/GoogleAuthConfig'
 import UIStateManager from './services/UIStateManager'
 import { useGoogleServices } from './hooks/GoogleServices'
+import { useApplicationExecutor } from './hooks/CommandExecutors'
 
 function App() {
-  const apiConfig: GoogleApiConfig = {
-    apiKey: "", // TODO
-    clientId: "", // TODO
+  const apiConfig: GoogleAuthConfig = {
+    api_key: "", // TODO
+    client_id: "", // TODO
   }
 
-  const [count, setCount] = useState(0)
-  const [uiController, setUiController] = useState<UIStateManager>();
-  const [appController, setAppController] = useState<any>(); // FIXME
+  const [count, setCount] = useState(0);
 
-  const services = useGoogleServices();
+  const services = useGoogleServices(apiConfig);
+  const executor = useApplicationExecutor(services.auth, services.api);
+  const [uiState] = useState<UIStateManager>(() => new UIStateManager());
 
   return (
     <>
