@@ -36,11 +36,11 @@ export default class GoogleAuthService implements AuthService {
     console.log("Token response: ", response);
   }
 
-  login(): boolean {
-    this.#tokenClient.requestAccessToken();
-    throw new Error("Method not implemented.");
+  login(): void {
+    console.log("Logging in...");
+    this.#tokenClient.requestAccessToken({prompt: "consent"}); // TODO this should change if has token
   }
-  logout(): boolean {
+  logout(): void {
     throw new Error("Method not implemented.");
   }
 }
