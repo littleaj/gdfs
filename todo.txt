@@ -1,0 +1,31 @@
+(A) 2024-11-24 use sample code for oauth from google dev docs and refactor after it's working @prototype +oauth2
+(B) 2024-11-24 refactor auth code to prepare UI intergration @refactor +oauth2
+(B) 2024-11-24 write test for auth code before refactor @refactor @tdd +oauth2
+(C) 2024-11-24 add/wire login and logout buttons to trigger sign on/off +oauth2
+(C) 2024-11-24 get file list from google drive and log to console @prototype +list
+(C) 2024-11-24 ensure names, types, and last mod date is returned @prototype +list
+(D) 2024-11-24 experiment with the tree component to understand necessary data structures @prototype @ui +list
+(E) 2024-11-24 write tests for tree component @tdd @ui +list 
+(F) 2024-11-24 write tests for list fetch action @tdd @ui +list
+(G) 2024-11-24 get google drive contents in tree view @ui @api +list
+(H) 2024-11-24 create buttons for upload, download, and delete @ui +upload +download +delete
+(I) 2024-11-24 write tests for button components @tdd @ui +upload +download +delete
+(I) 2024-11-24 add tests for upload action @tdd @api +upload
+(I) 2024-11-24 add tests for download action @tdd @api +download
+(I) 2024-11-24 add tests for delete action @tdd @api +delete
+(J) 2024-11-24 implement upload action @api @code +upload
+(J) 2024-11-24 implement download action @api @code +download
+(J) 2024-11-24 implement delete action @api @code +delete
+(K) 2024-11-24 research web app integration testing @research +intest
+(K) 2024-11-24 write integration tests @code +intest
+(L) 2024-11-24 review implementation, identify points of refactoring @refactor @review
+(L) 2024-11-24 make a list of refactors @refactor @planning
+(M) 2024-11-24 do refactoring to clean up code presentation @refactor @code +clean
+(N) 2024-11-24 research how to record with OBS @research +video
+(O) 2024-11-24 write script for presentation @write @planning +video
+(P) 2024-11-24 review current documentation and list missing parts @planning +docs
+(P) 2024-11-24 add missing parts of docs @write +docs
+(Q) 2024-11-24 final review/proofread of project before recording @review
+(R) 2024-11-24 record video @present +video
+(S) 2024-11-24 submit!
+2024-11-24 make checklist for documentation, tests, code quality, and video content @planning +deliverables
