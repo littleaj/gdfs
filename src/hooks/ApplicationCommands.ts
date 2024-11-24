@@ -3,8 +3,13 @@ import ApiService from "../services/ApiService";
 import AuthService from "../services/AuthService";
 import { dispatcherBuilder } from "../commands/CommandDispatcher";
 
-export function useApplicationExecutor(auth: AuthService, api: ApiService) {
-  const [executor, /* readonly */] = useState(
+// FIXME put different hooks in their own files
+
+/**
+ * UI elements use this to dispatch commands to application services
+ */
+export function useApplicationCommands(auth: AuthService, api: ApiService) {
+  const [commands, /* readonly */] = useState(
     () => dispatcherBuilder()
       .withCommand("login", () => auth.login())
       .withCommand("logout", () => auth.logout())
@@ -14,13 +19,13 @@ export function useApplicationExecutor(auth: AuthService, api: ApiService) {
       .withCommand("delete", (remoteFile: string) => api.delete(remoteFile))
       .get()
   );
-  return executor;
+  return commands;
 }
 
-type ApplicationExecutor = ReturnType<typeof useApplicationExecutor>;
+type ApplicationCommandDispatcher = ReturnType<typeof useApplicationCommands>;
 
-export function useUiEventHandler(app: ApplicationExecutor) {
-  const [executor, /* readonly */] = useState(
+export function useUiEventHandler(app: ApplicationCommandDispatcher) {
+  const [commands, /* readonly */] = useState(
     () => dispatcherBuilder()
       .withCommand("clickLogin", app.login)
       .withCommand("clickLogout", app.logout)
@@ -28,7 +33,7 @@ export function useUiEventHandler(app: ApplicationExecutor) {
       .withCommand("clickUpload", app.upload)
       .get()
   );
-  return executor;
+  return commands;
 }
 
 // type UiEventHandler = ReturnType<typeof useUiEventHandler>;
@@ -47,9 +52,10 @@ type DriveItem = {
   parent?: DrivePath;
 };
 
-type ComponentId = string; // NOSONAR
+// TODO properly define this
+export type ComponentId = string; // NOSONAR we'll make this concrete later
 
-type UiState = {
+export type UiState = {
   disabled: Set<ComponentId>,
   drive: {
     contents: Map<DrivePath, DriveItem>;
@@ -140,22 +146,14 @@ const uiStateMutator: StateMutator = (state: UiState) => ({
 
 const DRIVE_COMPONENTS_PANEL_ID = "drive-panel";
 const DRIVE_FILES_COMPONENT_ID = "drive-files";
+
+/**
+ * UI components use the state to configure their attributes.
+ * Application behaviors use this to update the UI based on application state.
+ */
 export function useUiStateReducer() {
-  useReducer((state: UiState, request: UiUpdateRequest) => {
+  return useReducer((state: UiState, request: UiUpdateRequest) => {
     const mutator = uiStateMutator(state)[request.action];
     return mutator(request);
   }, [DRIVE_COMPONENTS_PANEL_ID], createInitalUiState);
-}
-
-export function useUiStateHandler(app: ApplicationExecutor) {
-  const [executor, /* readonly */] = useState(
-    () => dispatcherBuilder()
-      .withCommand("expandDir", (path: string) => path)
-      .withCommand("collapseDir", (path: string) => path)
-      .withCommand("selectFile", (path: string) => path)
-      .withCommand("setComponentGroupEnabled", (groupId: string, enabled: boolean) => ({ groupId, enabled }))
-      .withCommand("setButtonEnabled", (id: string, enabled: boolean) => ({ id, enabled }))
-      .get()
-  );
-  return executor;
 }
