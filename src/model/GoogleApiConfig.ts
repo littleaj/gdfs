@@ -1,5 +1,5 @@
 export default interface GoogleApiConfig {
-  // TODO verify this is the correct information
-  apiKey: string;
-  clientId: string; 
+  // FIXME inject these at build time
+  api_key?: string; // XXX this shouldn't be public; create a CLASP service to serve tokens
+  client_id: string; 
 }
