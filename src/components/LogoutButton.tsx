@@ -1,6 +1,13 @@
 import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
+import { AuthButtonProps } from "./types";
 
-export default function LogoutButton() {
-  return <Button onClick={() => console.log("Logout Clicked!")} variant="outlined" color="primary" endIcon={<LogoutTwoToneIcon />} disabled={true}>Logout</Button>;
+
+export default function LogoutButton({onClick, disabled}: AuthButtonProps) {
+  return <Button 
+    onClick={onClick} 
+    variant="outlined" 
+    color="primary" 
+    endIcon={<LogoutTwoToneIcon />} 
+    disabled={disabled}>Logout</Button>;
 };

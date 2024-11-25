@@ -2,14 +2,15 @@ import "./App.css";
 import GoogleAuthConfig from "./model/GoogleAuthConfig";
 import LoginButton from "./components/LoginButton";
 import LogoutButton from "./components/LogoutButton";
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, Typography } from "@mui/material";
+import { useState } from "react";
 
 function App() {
   const apiConfig: GoogleAuthConfig = {
     api_key: import.meta.env.VITE_API_KEY,
     client_id: import.meta.env.VITE_CLIENT_ID,
     discovery_doc: "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-    scopes: "https://www.googleapis.com/auth/drive.file", // Q is this all I need for scopes?
+    scopes: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly", // Q is this all I need for scopes?
   };
 
   const CLIENT_ID = apiConfig.client_id;
@@ -28,29 +29,37 @@ function App() {
    * discovery doc to initialize the API.
    */
   function initializeGapiClient() {
+    console.log("Start gapi.client init");
     gapi.client.init({
       apiKey: API_KEY,
       discoveryDocs: [DISCOVERY_DOC],
     }).then(() => {
-      console.info("API client initialized");
-    }, 
-    (err) => { console.error("API client init failed", err) })
-    .then(() => gisLoaded())
-    .catch((err) => console.error("Error from GIS init: ", err));
+      console.info("gapi.client initialized");
+    },
+      (err) => console.error("gapi.client init failed", err))
+      .then(() => gisLoaded())
+      .catch((err) => console.error("Error from GIS init: ", err));
   }
 
   /**
    * Callback after Google Identity Services are loaded.
    */
   function gisLoaded() {
+    console.log("initTokenClient");
     tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: CLIENT_ID,
       scope: SCOPES,
       callback: (resp) => {
+        console.log("TC callback! => ", resp);
         if (resp.error !== undefined) {
-          throw (resp);
+          console.error("TC callback error!");
+          const { error, error_description, error_uri } = resp;
+          throw new Error(`${error}: ${error_description} <${error_uri}>`);
         }
         listFiles();
+      },
+      error_callback: (err) => {
+        console.error("TC ClientConfigError: auth did not complete", err);
       }
     });
   }
@@ -69,6 +78,7 @@ function App() {
       // Skip display of account chooser and consent dialog for an existing session.
       tokenClient.requestAccessToken({ prompt: "" });
     }
+    setLoggedIn(!!gapi.client.getToken());
   }
 
   /**
@@ -76,12 +86,13 @@ function App() {
    */
   function handleSignoutClick() {
     const token = gapi.client.getToken();
-    if (token !== null) {
+    if (token) {
       google.accounts.oauth2.revoke(token.access_token, () => {
         console.log("token revoked");
       });
-      gapi.client.setToken({} as TokenObject);
+      gapi.client.setToken(null);
     }
+    setLoggedIn(false);
   }
 
   /**
@@ -95,7 +106,7 @@ function App() {
     }).then((response) => {
       const files = response.result.files;
       if (!files || files.length == 0) {
-        console.warn("No files found");
+        console.info("No files found");
         return;
       }
       // Flatten to string to display
@@ -114,6 +125,7 @@ function App() {
     loadGapi();
   });
 
+  const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
 
   return (
     <>
@@ -122,20 +134,14 @@ function App() {
       </header>
       <Card variant="outlined">
         <CardContent>
-          <Typography>Push the button...</Typography>
-          <Button onClick={handleAuthClick}>PUSH</Button>
+          <Typography>This is where files go...</Typography>
+          
         </CardContent>
+        <CardActions>
+          <LoginButton onClick={handleAuthClick} disabled={loggedIn} />
+          <LogoutButton onClick={handleSignoutClick} disabled={!loggedIn} />
+        </CardActions>
       </Card>
-      <div className="card">
-        <LoginButton />
-        <LogoutButton />
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }

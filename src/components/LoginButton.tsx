@@ -1,7 +1,14 @@
 import LoginTwoToneIcon from "@mui/icons-material/LoginTwoTone";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
+import { AuthButtonProps } from "./types";
 
-export default function LoginButton() {
 
-  return <Button onClick={() => console.log("Login Clicked!")} variant="contained" color="primary" endIcon={<LoginTwoToneIcon />} disabled={true}>Login</Button>;
+export default function LoginButton({ onClick, disabled }: AuthButtonProps) {
+
+  return <Button 
+    onClick={onClick} 
+    variant="contained"
+    color="primary"
+    endIcon={<LoginTwoToneIcon />}
+    disabled={disabled}>Login</Button>;
 };
