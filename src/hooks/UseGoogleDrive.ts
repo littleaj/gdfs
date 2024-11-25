@@ -18,6 +18,7 @@ export default function useGoogleDrive(): [DriveFile[], () => void, () => void] 
   const refreshContents = useCallback(() => {
     console.log("querying for files");
     gapi.client.drive.files.list({
+      q: "",
       corpora: "user",
       orderBy: "name_natural",
       fields: "files(id, name, modifiedTime, mimeType, parents, iconLink)", // Q how does this work?
@@ -27,7 +28,7 @@ export default function useGoogleDrive(): [DriveFile[], () => void, () => void] 
       if (!files) {
         console.warn("files refresh did not return a value...");
       }
-      console.info(files?.length + "files found");
+      console.info(files?.length + " files found");
       setDriveContents((files ?? []) as DriveFile[]);
     },
       (err) => {
