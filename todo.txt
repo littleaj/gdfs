@@ -1,23 +1,26 @@
-(B) 2024-11-24 write test for auth code before refactor @refactor @tdd +oauth2
-(E) 2024-11-24 write tests for tree component @tdd @ui +list 
-(F) 2024-11-24 write tests for list fetch action @tdd @ui +list
-(G) 2024-11-24 get google drive contents in tree view @ui @api +list
-(I) 2024-11-24 write tests for button components @tdd @ui +upload +download +delete
-(I) 2024-11-24 add tests for upload action @tdd @api +upload
-(I) 2024-11-24 add tests for download action @tdd @api +download
-(I) 2024-11-24 add tests for delete action @tdd @api +delete
-(J) 2024-11-24 implement upload action @api @code +upload
-(J) 2024-11-24 implement download action @api @code +download
-(J) 2024-11-24 implement delete action @api @code +delete
-(K) 2024-11-24 research web app integration testing @research +intest
-(K) 2024-11-24 write integration tests @code +intest
-(L) 2024-11-24 review implementation, identify points of refactoring @refactor @review
-(M) 2024-11-24 do refactoring to clean up code presentation @refactor @code +clean
-(N) 2024-11-24 research how to record with OBS @research +video
-(N) 2024-11-24 make checklist for documentation, tests, code quality, and video content @planning +deliverables
-(O) 2024-11-24 write script for presentation @write @planning +video
-(P) 2024-11-24 review current documentation and list missing parts @planning +docs
-(P) 2024-11-24 add missing parts of docs @write +docs
-(Q) 2024-11-24 final review/proofread of project before recording @review
-(R) 2024-11-24 record video @present +video
-(S) 2024-11-24 submit!
+(A) 2024-11-24 write @tests for +oauth code before @refactor 
+(A) @refactor +gapi and +oauth code for writing @@tests
+(B) 2024-11-24 write @tests for tree component @ui +list 
+(B) @research +list filtering
+(C) 2024-11-24 write @tests for +list fetch action @ui
+(C) add +list filter to @code
+(D) 2024-11-24 get google drive contents in tree view @ui @api +list
+(F) 2024-11-24 write @tests for button components @ui
+(F) 2024-11-24 add @tests for +upload-action @api
+(F) 2024-11-24 add @tests for +download-action @api
+(F) 2024-11-24 add @tests for +delete-action @api
+(G) 2024-11-24 implement +upload action @api @code
+(G) 2024-11-24 implement +download action @api @code
+(G) 2024-11-24 implement +delete action @api @code
+(H) 2024-11-24 research web app @integration-tests @research
+(H) 2024-11-24 write @integration-tests @code
+(I) 2024-11-24 @review implementation for +readablity; id:check-readability
+(J) 2024-11-24 do +readability @refactor; after:check-readability before:video-research
+(K) 2024-11-24 @research how to record +video with OBS; id:video-research
+(K) 2024-11-24 make checklist for documentation, +unit-tests, +int-tests, +readability, and +video content; @planning +deliverables
+(L) 2024-11-24 write script for presentation @write @planning +video
+(M) 2024-11-24 review current documentation and list missing parts @planning +docs
+(M) 2024-11-24 add missing parts of docs @write +docs
+(N) 2024-11-24 final review/proofread of project before recording @review
+(O) 2024-11-24 record video @present +video
+(P) 2024-11-24 submit!
