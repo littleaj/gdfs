@@ -5,12 +5,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open --strictPort",
     "build": "tsc -b && vite build",
+    "prebuild": "npm test",
     "lint": "eslint .",
-    "fix": "eslint . --fix",
+    "fix": "npm run lint -- --fix",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "pretest": "npm run fix"
   },
   "repository": {
     "type": "git",
