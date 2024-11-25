@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { GoogleAuthService } from "./google-services";
+import { gauth } from "../googleapis";
 
 const AuthConfig = {
   api_key: import.meta.env.VITE_API_KEY,
@@ -8,10 +9,9 @@ const AuthConfig = {
   scopes: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly", // Q is this all I need for scopes?
 };
 
-
-function createTokenClient(onTokenRequest: TokenClientConfig["callback"]): TokenClient {
+function createTokenClient(onTokenRequest: gauth.TokenClientConfig["callback"]): gauth.TokenClient {
   console.log("Creating auth client...");
-  return google.accounts.oauth2.initTokenClient({
+  return gauth.initTokenClient({
     client_id: AuthConfig.client_id,
     scope: AuthConfig.scopes,
     callback: onTokenRequest,
@@ -35,7 +35,7 @@ async function loadGoogleApi(): Promise<void> {
 }
 
 export default function useGoogleAuth(): GoogleAuthService {
-  function handleTokenRequest(resp: google.accounts.oauth2.TokenResponse): void {
+  function handleTokenResponse(resp: gauth.TokenResponse): void {
     const success: boolean = !!resp?.access_token;
     console.log("Auth success: ", success);
     if (!success) {
@@ -52,12 +52,12 @@ export default function useGoogleAuth(): GoogleAuthService {
   }
 
   const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
-  const [tokenClient, setTokenClient] = useState<TokenClient>(() => createTokenClient(handleTokenRequest));
+  const [tokenClient, setTokenClient] = useState<gauth.TokenClient>(() => createTokenClient(handleTokenResponse));
 
   const doLogin = useCallback(() => {
     if (!tokenClient) {
       console.warn("Auth client not initialized in doLogin...");
-      setTokenClient(createTokenClient(handleTokenRequest));
+      setTokenClient(createTokenClient(handleTokenResponse));
     }
 
     if (gapi.client.getToken() === null) {
@@ -78,7 +78,7 @@ export default function useGoogleAuth(): GoogleAuthService {
   const doLogout = useCallback(() => {
     const token = gapi.client.getToken();
     if (token) {
-      google.accounts.oauth2.revoke(token.access_token, () => {
+      gauth.revoke(token.access_token, () => {
         console.log("session token revoked");
       });
       gapi.client.setToken(null);
