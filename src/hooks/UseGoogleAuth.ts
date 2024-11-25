@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { GoogleAuthService } from "./google-services";
 
 const AuthConfig = {
   api_key: import.meta.env.VITE_API_KEY,
@@ -31,12 +32,6 @@ async function loadGoogleApi(): Promise<void> {
   return new Promise<void>((resolve) => {
     gapi.load("client", () => resolve(initializeApiClient()));
   });
-}
-
-interface GoogleAuthService {
-  loggedIn: boolean;
-  doLogin: () => void;
-  doLogout: () => void;
 }
 
 export default function useGoogleAuth(): GoogleAuthService {
