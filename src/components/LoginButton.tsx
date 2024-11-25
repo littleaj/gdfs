@@ -1,6 +1,6 @@
 import LoginTwoToneIcon from "@mui/icons-material/LoginTwoTone";
 import Button from "@mui/material/Button";
-import { AuthButtonProps } from "./types";
+import { AuthButtonProps } from "./components";
 
 
 export default function LoginButton({ onClick, disabled }: AuthButtonProps) {
