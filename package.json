@@ -5,7 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite --open --strictPort",
+    "dev": "vite --strictPort",
     "compile": "tsc -b",
     "build": "vite build",
     "prebuild": "npm run compile && npm test -- --passWithNoTests",
