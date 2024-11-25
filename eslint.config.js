@@ -40,6 +40,7 @@ export default tseslint.config(
       "no-explicit-any": "off",
       "semi": ["warn", "always"],
       "quotes": ["warn", "double"],
+      "@typescript-eslint/no-inferrable-types": "off"
     },
   },
 );
