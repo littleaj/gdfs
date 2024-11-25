@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 function App() {
   const { mode } = useColorScheme();
-  const [loggedIn, login, logout] = useGoogleAuth();
+  const { loggedIn, doLogin: login, doLogout: logout } = useGoogleAuth();
   const [contents, refreshContents, resetContents] = useGoogleDrive();
 
   useEffect(() => {

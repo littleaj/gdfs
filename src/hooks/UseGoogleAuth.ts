@@ -33,7 +33,13 @@ async function loadGoogleApi(): Promise<void> {
   });
 }
 
-export default function useGoogleAuth(): [boolean, () => void, () => void] {
+interface GoogleAuthService {
+  loggedIn: boolean;
+  doLogin: () => void;
+  doLogout: () => void;
+}
+
+export default function useGoogleAuth(): GoogleAuthService {
   function handleTokenRequest(resp: google.accounts.oauth2.TokenResponse): void {
     const success: boolean = !!resp?.access_token;
     console.log("Auth success: ", success);
@@ -92,5 +98,5 @@ export default function useGoogleAuth(): [boolean, () => void, () => void] {
     }, (err) => console.error("gapi.client init failed", err));
   }, []);
 
-  return [loggedIn, doLogin, doLogout];
+  return  { loggedIn, doLogin, doLogout };
 }
