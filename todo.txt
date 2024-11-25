@@ -1,8 +1,5 @@
-(B) 2024-11-24 refactor auth code to prepare UI intergration @refactor +oauth2
 (B) 2024-11-24 write test for auth code before refactor @refactor @tdd +oauth2
-(C) 2024-11-24 add/wire login and logout buttons to trigger sign on/off +oauth2
 (C) 2024-11-24 get file list from google drive and log to console @prototype +list
-(C) 2024-11-24 ensure names, types, and last mod date is returned @prototype +list
 (D) 2024-11-24 experiment with the tree component to understand necessary data structures @prototype @ui +list
 (E) 2024-11-24 write tests for tree component @tdd @ui +list 
 (F) 2024-11-24 write tests for list fetch action @tdd @ui +list
