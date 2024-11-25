@@ -1,19 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
-import { GoogleAuthService } from "./google-services";
-import { gauth } from "../googleapis";
+import { AuthConfig, GoogleAuthService } from "./google-services";
+import { gauth } from "../google-aliases";
 
-const AuthConfig = {
+type TokenClient = google.accounts.oauth2.TokenClient;
+type TokenClientConfig = google.accounts.oauth2.TokenClientConfig;
+type TokenResponse = google.accounts.oauth2.TokenResponse;
+
+const AUTH_CONFIG: AuthConfig = {
   api_key: import.meta.env.VITE_API_KEY,
   client_id: import.meta.env.VITE_CLIENT_ID,
   discovery_doc: "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
   scopes: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly", // Q is this all I need for scopes?
 };
 
-function createTokenClient(onTokenRequest: gauth.TokenClientConfig["callback"]): gauth.TokenClient {
+
+
+function createTokenClient(onTokenRequest: TokenClientConfig["callback"]): TokenClient {
   console.log("Creating auth client...");
   return gauth.initTokenClient({
-    client_id: AuthConfig.client_id,
-    scope: AuthConfig.scopes,
+    client_id: AUTH_CONFIG.client_id,
+    scope: AUTH_CONFIG.scopes,
     callback: onTokenRequest,
     error_callback: (err) => {
       console.error("TC ClientConfigError: auth did not complete", err);
@@ -23,8 +29,8 @@ function createTokenClient(onTokenRequest: gauth.TokenClientConfig["callback"]):
 
 async function initializeApiClient(): Promise<void> {
   return gapi.client.init({
-    apiKey: AuthConfig.api_key,
-    discoveryDocs: [AuthConfig.discovery_doc],
+    apiKey: AUTH_CONFIG.api_key,
+    discoveryDocs: [AUTH_CONFIG.discovery_doc],
   });
 }
 
@@ -34,8 +40,19 @@ async function loadGoogleApi(): Promise<void> {
   });
 }
 
+function validateAuthConfig() {
+  const requiredKeys: (keyof AuthConfig)[] = ["api_key", "client_id"];
+  requiredKeys.forEach(key => {
+    if (!AUTH_CONFIG[key]) {
+      throw new ReferenceError(`${key} is not defined`);
+    }
+  });
+}
+
 export default function useGoogleAuth(): GoogleAuthService {
-  function handleTokenResponse(resp: gauth.TokenResponse): void {
+  validateAuthConfig();
+
+  function handleTokenResponse(resp: TokenResponse): void {
     const success: boolean = !!resp?.access_token;
     console.log("Auth success: ", success);
     if (!success) {
@@ -52,7 +69,7 @@ export default function useGoogleAuth(): GoogleAuthService {
   }
 
   const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
-  const [tokenClient, setTokenClient] = useState<gauth.TokenClient>(() => createTokenClient(handleTokenResponse));
+  const [tokenClient, setTokenClient] = useState<TokenClient>(() => createTokenClient(handleTokenResponse));
 
   const doLogin = useCallback(() => {
     if (!tokenClient) {

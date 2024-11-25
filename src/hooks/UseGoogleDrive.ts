@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
-import { gdrive } from "../googleapis";
+import { gdrive } from "../google-aliases";
+
+type File = gapi.client.drive.File;
 
 // modifiedTime is RFC-3339
-type DriveFile = Required<Pick<gdrive.File, "id" | "name" | "modifiedTime" | "mimeType" | "parents" | "iconLink">> & {
+type DriveFile = Required<Pick<File, "id" | "name" | "modifiedTime" | "mimeType" | "parents" | "iconLink">> & {
   "label": string
 };
 
