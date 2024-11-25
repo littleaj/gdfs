@@ -36,8 +36,7 @@ async function loadGoogleApi(): Promise<void> {
   });
 }
 
-function validateAuthConfig() {
-  const requiredKeys: (keyof AuthConfig)[] = ["client_id"];
+function validateAuthConfig(...requiredKeys: (keyof AuthConfig)[]) {
   requiredKeys.forEach(key => {
     if (!AUTH_CONFIG[key]) {
       throw new ReferenceError(`${key} is not defined`);
@@ -46,7 +45,7 @@ function validateAuthConfig() {
 }
 
 export default function useGoogleAuth(): GoogleAuthService {
-  validateAuthConfig();
+  validateAuthConfig("client_id");
 
   function handleTokenResponse(resp: TokenResponse): void {
     const success: boolean = !!resp?.access_token;
