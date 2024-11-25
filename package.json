@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "vite --open --strictPort",
-    "build": "tsc -b && vite build",
-    "prebuild": "npm test",
+    "compile": "tsc -b",
+    "build": "vite build",
+    "prebuild": "npm run compile && npm test",
     "lint": "eslint .",
     "fix": "npm run lint -- --fix",
     "preview": "vite preview",
