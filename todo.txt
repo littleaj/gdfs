@@ -1,4 +1,3 @@
-(A) 2024-11-24 use sample code for oauth from google dev docs and refactor after it's working @prototype +oauth2
 (B) 2024-11-24 refactor auth code to prepare UI intergration @refactor +oauth2
 (B) 2024-11-24 write test for auth code before refactor @refactor @tdd +oauth2
 (C) 2024-11-24 add/wire login and logout buttons to trigger sign on/off +oauth2
