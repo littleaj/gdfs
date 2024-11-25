@@ -6,13 +6,10 @@ type TokenClientConfig = google.accounts.oauth2.TokenClientConfig;
 type TokenResponse = google.accounts.oauth2.TokenResponse;
 
 const AUTH_CONFIG: AuthConfig = {
-  api_key: import.meta.env.VITE_API_KEY,
   client_id: import.meta.env.VITE_CLIENT_ID,
   discovery_doc: "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
   scopes: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly", // Q is this all I need for scopes?
 };
-
-
 
 function createTokenClient(onTokenRequest: TokenClientConfig["callback"]): TokenClient {
   console.log("Creating auth client...");
@@ -28,7 +25,7 @@ function createTokenClient(onTokenRequest: TokenClientConfig["callback"]): Token
 
 async function initializeApiClient(): Promise<void> {
   return gapi.client.init({
-    apiKey: AUTH_CONFIG.api_key,
+    clientId: AUTH_CONFIG.client_id,
     discoveryDocs: [AUTH_CONFIG.discovery_doc],
   });
 }
@@ -40,7 +37,7 @@ async function loadGoogleApi(): Promise<void> {
 }
 
 function validateAuthConfig() {
-  const requiredKeys: (keyof AuthConfig)[] = ["api_key", "client_id"];
+  const requiredKeys: (keyof AuthConfig)[] = ["client_id"];
   requiredKeys.forEach(key => {
     if (!AUTH_CONFIG[key]) {
       throw new ReferenceError(`${key} is not defined`);
