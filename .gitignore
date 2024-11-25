@@ -132,3 +132,6 @@ client_secret_*.apps.googleusercontent.com.json
 
 # todotxt stuff
 todo.txt.bak
+report.txt
+.braindump.md
+.doing.todo.txt

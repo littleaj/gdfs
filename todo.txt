@@ -1,11 +1,12 @@
-(A) 2024-11-24 write @tests for +oauth code before @refactor 
 (A) @refactor +gapi and +oauth code for writing @@tests
+(B) 2024-11-24 write @tests for +oauth code @refactor 
 (B) 2024-11-24 write @tests for tree component @ui +list 
 (B) @research +list filtering
 (C) 2024-11-24 write @tests for +list fetch action @ui
 (C) add +list filter to @code
 (D) 2024-11-24 get google drive contents in tree view @ui @api +list
 (F) 2024-11-24 write @tests for button components @ui
+(F) create @ui buttons for +upload, +download, and +delete
 (F) 2024-11-24 add @tests for +upload-action @api
 (F) 2024-11-24 add @tests for +download-action @api
 (F) 2024-11-24 add @tests for +delete-action @api
