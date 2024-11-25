@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { AuthConfig, GoogleAuthService } from "./google-services";
-import { gauth } from "../google-aliases";
 
 type TokenClient = google.accounts.oauth2.TokenClient;
 type TokenClientConfig = google.accounts.oauth2.TokenClientConfig;
@@ -17,7 +16,7 @@ const AUTH_CONFIG: AuthConfig = {
 
 function createTokenClient(onTokenRequest: TokenClientConfig["callback"]): TokenClient {
   console.log("Creating auth client...");
-  return gauth.initTokenClient({
+  return google.accounts.oauth2.initTokenClient({
     client_id: AUTH_CONFIG.client_id,
     scope: AUTH_CONFIG.scopes,
     callback: onTokenRequest,
@@ -95,7 +94,7 @@ export default function useGoogleAuth(): GoogleAuthService {
   const doLogout = useCallback(() => {
     const token = gapi.client.getToken();
     if (token) {
-      gauth.revoke(token.access_token, () => {
+      google.accounts.oauth2.revoke(token.access_token, () => {
         console.log("session token revoked");
       });
       gapi.client.setToken(null);

@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { gdrive } from "../google-aliases";
 
 type File = gapi.client.drive.File;
 
@@ -18,7 +17,7 @@ export default function useGoogleDrive(): [DriveFile[], () => void, () => void] 
 
   const refreshContents = useCallback(() => {
     console.log("querying for files");
-    gdrive.files.list({
+    gapi.client.drive.files.list({
       corpora: "user",
       orderBy: "name_natural",
       fields: "files(id, name, modifiedTime, mimeType, parents, iconLink)", // Q how does this work?
