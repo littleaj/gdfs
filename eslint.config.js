@@ -3,12 +3,13 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import react from "eslint-plugin-react";
+import eslint from "@eslint/js";
 
 export default tseslint.config(
   { ignores: ['dist'] },
   {
     extends: [
-      ...tseslint.configs.recommended,
+      eslint.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
     ],
@@ -40,7 +41,8 @@ export default tseslint.config(
       "no-explicit-any": "off",
       "semi": ["warn", "always"],
       "quotes": ["warn", "double"],
-      "@typescript-eslint/no-inferrable-types": "off"
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 );
