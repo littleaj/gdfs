@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AuthConfig, GoogleAuthService } from "./google-services";
+import _ from "lodash";
 
 type TokenClient = google.accounts.oauth2.TokenClient;
 type TokenClientConfig = google.accounts.oauth2.TokenClientConfig;
@@ -44,27 +45,27 @@ function validateAuthConfig(...requiredKeys: (keyof AuthConfig)[]) {
   });
 }
 
+function handleTokenResponse(resp: TokenResponse): boolean {
+  const success: boolean = !!resp?.access_token;
+  console.log("Auth success: ", success);
+  if (!success) {
+    const err = {
+      code: resp.error ?? "UNKNOWN_ERROR",
+      description: resp.error_description ?? "...",
+      uri: resp.error_uri ?? "",
+    };
+    const errorMessage = `${err.code}: ${err.description} <${err.uri}>`;
+    console.error("TC callback error! ", errorMessage);
+    throw new Error(errorMessage);
+  }
+  return success;
+}
+
 export default function useGoogleAuth(): GoogleAuthService {
   validateAuthConfig("client_id");
 
-  function handleTokenResponse(resp: TokenResponse): void {
-    const success: boolean = !!resp?.access_token;
-    console.log("Auth success: ", success);
-    if (!success) {
-      const err = {
-        code: resp.error ?? "UNKNOWN_ERROR",
-        description: resp.error_description ?? "...",
-        uri: resp.error_uri ?? "",
-      };
-      const errorMessage = `${err.code}: ${err.description} <${err.uri}>`;
-      console.error("TC callback error! ", errorMessage);
-      throw new Error(errorMessage);
-    }
-    setLoggedIn(success);
-  }
-
   const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
-  const [tokenClient, setTokenClient] = useState<TokenClient>(() => createTokenClient(handleTokenResponse));
+  const [tokenClient, setTokenClient] = useState<TokenClient>(() => createTokenClient(_.flow(handleTokenResponse, setLoggedIn)));
 
   const doLogin = useCallback(() => {
     if (!tokenClient) {
