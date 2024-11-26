@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AuthConfig, GoogleAuthService } from "./google-services";
+import { GoogleAuthService } from "../@types/GoogleAuthService";
+import { AuthConfig } from "../@types/AuthConfig";
 import _ from "lodash";
 import { TokenClient, TokenClientConfig, TokenResponse } from "../@types/gis";
 

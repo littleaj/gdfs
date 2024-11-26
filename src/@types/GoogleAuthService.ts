@@ -3,9 +3,3 @@ export interface GoogleAuthService {
   doLogin: () => void;
   doLogout: () => void;
 }
-
-export interface AuthConfig {
-  client_id: string;
-  discovery_doc: string;
-  scopes: string;
-}
