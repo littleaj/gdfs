@@ -3,7 +3,7 @@ import { TokenClient, TokenResponse } from "../@types/gis";
 import { AUTH_CONFIG } from "../hooks/config";
 
 export function createTokenClient(): TokenClient {
-  validateAuthConfig("client_id");
+  validateAuthConfig("client_id", "api_key");
 
   console.log("Creating auth client...");
   return google.accounts.oauth2.initTokenClient({
@@ -18,7 +18,7 @@ export function createTokenClient(): TokenClient {
 
 async function initializeApiClient(): Promise<void> {
   return gapi.client.init({
-    clientId: AUTH_CONFIG.client_id,
+    apiKey: AUTH_CONFIG.api_key,
     discoveryDocs: [AUTH_CONFIG.discovery_doc],
   });
 }
