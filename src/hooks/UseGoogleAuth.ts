@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { GoogleAuthService } from "../@types/GoogleAuthService";
+import { AuthService } from "../@types/AuthService";
 import { AuthConfig } from "../@types/AuthConfig";
 import _ from "lodash";
 import { TokenClient, TokenClientConfig, TokenResponse } from "../@types/gis";
@@ -59,7 +59,7 @@ function handleTokenResponse(resp: TokenResponse): boolean {
   return success;
 }
 
-export default function useGoogleAuth(): GoogleAuthService {
+export default function useGoogleAuth(): AuthService {
   validateAuthConfig("client_id");
 
   const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
