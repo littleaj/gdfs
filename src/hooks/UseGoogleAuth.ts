@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthService } from "../@types/AuthService";
 import { AuthConfig } from "../@types/AuthConfig";
 import _ from "lodash";
@@ -54,44 +54,44 @@ function handleTokenResponse(resp: TokenResponse): boolean {
   return success;
 }
 
+function loginHandler(tokenClient: TokenClient) {
+  if (gapi.client.getToken() === null) {
+    // Prompt the user to select a Google Account and ask for consent to share their data
+    // when establishing a new session.
+    console.log("Requesting consent...");
+    tokenClient.requestAccessToken({ prompt: "consent" });
+  } else {
+    console.log("auth: empty prompt...");
+    // Skip display of account chooser and consent dialog for an existing session.
+    tokenClient.requestAccessToken({ prompt: "" });
+  }
+}
+
+
+function logoutHandler() {
+  const token = gapi.client.getToken();
+  if (token) {
+    google.accounts.oauth2.revoke(token.access_token, () => {
+      console.log("session token revoked");
+    });
+    gapi.client.setToken(null);
+  }
+}
+
 export default function useGoogleAuth(): AuthService {
   validateAuthConfig("client_id");
 
   const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
-  const [tokenClient, setTokenClient] = useState<TokenClient>(() => createTokenClient(_.flow(handleTokenResponse, setLoggedIn)));
 
-  const doLogin = useCallback(() => {
-    if (!tokenClient) {
-      console.warn("Auth client not initialized in doLogin...");
-      setTokenClient(createTokenClient(handleTokenResponse));
-    }
-
-    if (gapi.client.getToken() === null) {
-      // Prompt the user to select a Google Account and ask for consent to share their data
-      // when establishing a new session.
-      console.log("Requesting consent...");
-      tokenClient.requestAccessToken({ prompt: "consent" });
-    } else {
-      console.log("auth: empty prompt...");
-      // Skip display of account chooser and consent dialog for an existing session.
-      tokenClient.requestAccessToken({ prompt: "" });
-    }
-  }, [tokenClient]);
-
-  /**
-   *  Sign out the user upon button click.
-   */
-  const doLogout = useCallback(() => {
-    const token = gapi.client.getToken();
-    if (token) {
-      google.accounts.oauth2.revoke(token.access_token, () => {
-        console.log("session token revoked");
-      });
-      gapi.client.setToken(null);
-    }
-    setLoggedIn(false);
-  }, []);
+  const tokenClient = createTokenClient(_.flow(handleTokenResponse, setLoggedIn));
   
+  const doLogin = _.partial(loginHandler, tokenClient);
+  const doLogout = () => {
+    logoutHandler();
+    setLoggedIn(false);
+  };
+
+  // we only want this to load once
   useEffect(() => {
     console.info("Initializing auth and api clients...");
     loadGoogleApi().then(() => {
@@ -99,5 +99,5 @@ export default function useGoogleAuth(): AuthService {
     }, (err) => console.error("gapi.client init failed", err));
   }, []);
 
-  return  { loggedIn, doLogin, doLogout };
+  return { loggedIn, doLogin, doLogout };
 }
