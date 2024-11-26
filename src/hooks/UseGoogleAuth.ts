@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AuthConfig, GoogleAuthService } from "./google-services";
 import _ from "lodash";
-
-type TokenClient = google.accounts.oauth2.TokenClient;
-type TokenClientConfig = google.accounts.oauth2.TokenClientConfig;
-type TokenResponse = google.accounts.oauth2.TokenResponse;
+import { TokenClient, TokenClientConfig, TokenResponse } from "../@types/gis";
 
 const AUTH_CONFIG: AuthConfig = {
   client_id: import.meta.env.VITE_CLIENT_ID,
