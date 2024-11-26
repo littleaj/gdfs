@@ -11,15 +11,14 @@ import { useEffect } from "react";
 function App() {
   const { mode } = useColorScheme();
   const { loggedIn, doLogin: login, doLogout: logout } = useGoogleAuth();
-  const [contents, refreshContents, resetContents] = useGoogleDrive();
+  const { driveContents: contents, refreshContents, resetContents } = useGoogleDrive();
 
   useEffect(() => {
     if (loggedIn) {
+      console.log("resetting...");
+      resetContents();
       console.log("refreshing!");
       refreshContents();
-    } else {
-      console.log("resetting");
-      resetContents();
     }
   }, [loggedIn, refreshContents, resetContents]);
 

@@ -7,7 +7,7 @@ type DriveFile = Required<Pick<File, "id" | "name" | "modifiedTime" | "mimeType"
   "label": string
 };
 
-export default function useGoogleDrive(): [DriveFile[], () => void, () => void] {
+export default function useGoogleDrive() {
 
   const [driveContents, setDriveContents] = useState<DriveFile[]>([] as DriveFile[]);
 
@@ -36,5 +36,5 @@ export default function useGoogleDrive(): [DriveFile[], () => void, () => void] 
       });
   }, []);
 
-  return [driveContents, refreshContents, resetContents];
+  return { driveContents, refreshContents, resetContents };
 }
