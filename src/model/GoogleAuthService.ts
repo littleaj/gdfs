@@ -2,11 +2,11 @@ import { AuthConfig } from "../@types/AuthConfig";
 import { TokenClient, TokenResponse } from "../@types/gis";
 import { AUTH_CONFIG } from "../hooks/config";
 
-export function createTokenClient(callback: () => void): TokenClient {
+export function createTokenClient(): TokenClient {
   validateAuthConfig("client_id");
 
   console.log("Creating auth client...");
-  const client = google.accounts.oauth2.initTokenClient({
+  return google.accounts.oauth2.initTokenClient({
     client_id: AUTH_CONFIG.client_id,
     scope: AUTH_CONFIG.scopes,
     callback: handleTokenResponse,
@@ -14,8 +14,6 @@ export function createTokenClient(callback: () => void): TokenClient {
       console.error("TC ClientConfigError: auth did not complete", err);
     }
   });
-  callback();
-  return client;
 }
 
 async function initializeApiClient(): Promise<void> {

@@ -5,10 +5,17 @@ import { createTokenClient, loadGoogleApis, loginHandler, logoutHandler } from "
 import { TokenClient } from "../@types/gis";
 
 export default function useGoogleAuth(): AuthService {
+  // we only want this to load once
+  const [tokenClient, /* readonly */ ] = useState<TokenClient>(createTokenClient);
+  useEffect(() => {
+    console.info("Initializing auth and api clients...");
+    
+    loadGoogleApis().then(() => {
+      console.info("gapi.client initialized");
+    }, (err) => console.error("gapi.client init failed", err));
+  }, []);
   const [loggedIn, setLoggedIn] = useState<boolean>(() => !!gapi?.client?.getToken()?.access_token);
 
-  // using useState so it's only initialized once
-  const [tokenClient] = useState<TokenClient>(() => createTokenClient(() => setLoggedIn(true)));
   
   const doLogin = () => {
     _.partial(loginHandler, tokenClient)();
@@ -20,14 +27,7 @@ export default function useGoogleAuth(): AuthService {
     setLoggedIn(false);
   };
 
-  // we only want this to load once
-  useEffect(() => {
-    console.info("Initializing auth and api clients...");
-
-    loadGoogleApis().then(() => {
-      console.info("gapi.client initialized");
-    }, (err) => console.error("gapi.client init failed", err));
-  }, []);
+  
 
   return { loggedIn, doLogin, doLogout };
 }
