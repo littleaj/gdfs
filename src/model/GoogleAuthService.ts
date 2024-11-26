@@ -11,7 +11,7 @@ export function createTokenClient(): TokenClient {
     scope: AUTH_CONFIG.scopes,
     callback: handleTokenResponse,
     error_callback: (err) => {
-      console.error("TC ClientConfigError: auth did not complete", err);
+      console.error("Authentication error: ", err.message);
     }
   });
 }

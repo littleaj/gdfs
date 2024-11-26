@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+
 type File = gapi.client.drive.File;
 
 // modifiedTime is RFC-3339
@@ -31,8 +32,8 @@ export default function useGoogleDrive() {
       console.info(files?.length + " files found");
       setDriveContents((files ?? []) as DriveFile[]);
     },
-      (err) => {
-        console.error("Error listing drive files: ", err);
+    (err: gapi.client.Response<{ error: Record<string, unknown> & { code: number, message: string } }>) => {
+        console.error(err.result.error.code, "- Error listing drive files: ", err.result.error.message);
       });
   }, []);
 
