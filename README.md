@@ -32,6 +32,11 @@ In the _Google Auth Platform_ section under the _Data Access_ tab, add these Dri
 
 Rename `.env.local-empty` in the root of the repository to `.env.local` and set the respective variables (`VITE_CLIENT_ID` and `VITE_API_KEY`) using the **Client ID** and **API Key** created in the previous steps.
 
+```dotenv
+VITE_CLIENT_ID= # client_id created in GCP project
+VITE_API_KEY= # api_key created in GCP project
+```
+
 ## Local Setup
 
 To run locally, follow these steps:
@@ -41,7 +46,9 @@ To run locally, follow these steps:
 I used these versions:
 
 ```console
-user@host:~/gdfs$ node --version && npm -version
+node --version && npm -version
+```
+```
 v20.16.0
 10.9.0
 ```
@@ -49,7 +56,7 @@ v20.16.0
 2. Once `npm` is installed, run install the dependencies:
 
 ```console
-user@host:~/gdfs$ npm install
+npm install
 ```
 
 ## Building & Running locally
@@ -62,13 +69,13 @@ This project uses [vite](https://vite.dev/guide/cli.html). Everything you should
 ### Build the project
 
 ```console
-user@host:~/gdfs$ npm run build
+npm run build
 ```
 
 ### Run the dev server
 
 ```console
-user@host:~/gdfs$ npm run dev
+npm run dev
 ```
 
 ### Run the tests
